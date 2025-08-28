@@ -1,0 +1,146 @@
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.qris-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    max-width: 450px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.qris-header {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    padding: 25px;
+    text-align: center;
+}
+
+.qris-header h3 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.qris-body {
+    padding: 30px;
+}
+
+.amount-input {
+    margin-bottom: 20px;
+}
+
+.amount-input input {
+    font-size: 1.2rem;
+    padding: 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+}
+
+.amount-input input:focus {
+    border-color: #4facfe;
+    box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+}
+
+.qr-container {
+    display: flex;
+    justify-content: center;
+    margin: 25px 0;
+    padding: 25px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 2px dashed #dee2e6;
+    min-height: 280px;
+    align-items: center;
+}
+
+.amount-display {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #28a745;
+    text-align: center;
+    margin: 15px 0;
+}
+
+.merchant-info {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.btn-custom {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-custom:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.loading {
+    text-align: center;
+    color: #6c757d;
+}
+
+.error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border: 1px solid #f5c6cb;
+}
+
+.success {
+    background: #d1edff;
+    color: #0c5460;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border: 1px solid #bee5eb;
+}
+
+.footer-info {
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.merchant-setup {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.form-control:focus {
+    border-color: #4facfe;
+    box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+}
+
+@media (max-width: 768px) {
+    .qris-card {
+        margin: 10px;
+    }
+    
+    .qris-body {
+        padding: 20px;
+    }
+}

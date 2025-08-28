@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <title>404 | Halaman Tidak Ditemukan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root{
+      --pink:#ff69b4;
+      --pink-dark:#ff1493;
+      --glass: rgba(255, 192, 203, 0.88);
+      --white:#fff;
+      --shadow: 0 10px 35px rgba(0,0,0,.25);
+    }
+    html,body{height:100%;margin:0;font-family:"Poppins",system-ui, -apple-system, "Segoe UI", Roboto, Arial;}
+    body{background: radial-gradient(1200px 800px at 30% 20%, rgba(255,105,180,.18), transparent 60%), radial-gradient(1000px 700px at 80% 70%, rgba(255,20,147,.14), transparent 60%), #06060a;color:var(--white);overflow:hidden;}
+    #bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;display:block}
+    .wrap{min-height:100%;display:grid;place-items:center;padding:24px}
+    .card404{
+      width:min(92vw, 920px);
+      background:var(--glass);
+      border-radius:20px;
+      padding:clamp(18px,3.4vw,36px);
+      box-shadow:var(--shadow);
+      text-align:center;
+      backdrop-filter: blur(8px);
+    }
+    .code{font-weight:800;letter-spacing:.04em;font-size:clamp(48px,9.6vw,140px);line-height:.9;margin:4px 0;color:#ffdc7a;text-shadow:0 6px 0 rgba(0,0,0,.15)}
+    .title{font-size:clamp(18px,3.4vw,28px);margin-bottom:6px;font-weight:700}
+    .desc{font-size:clamp(13px,2.4vw,16px);opacity:.95;margin-bottom:14px}
+    .btn-pink{background:var(--pink);color:#fff;border:0;padding:10px 16px;border-radius:999px;font-weight:600;box-shadow:0 8px 20px rgba(255,105,180,.35)}
+    .btn-pink:hover{background:var(--pink-dark)}
+    .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+    .chip{background:rgba(255,255,255,.95);color:#333;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:600}
+    @media (max-width:420px){
+      .card404{padding:16px}
+      .desc{padding:0 6px}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <div class="wrap">
+    <div class="card404" role="main" aria-labelledby="title404">
+      <div class="chips">
+        <span class="chip">💸 bayar</span>
+        <span class="chip">🪙 koin</span>
+        <span class="chip">💳 transaksi</span>
+      </div>
+
+      <div class="code" id="title404">404</div>
+      <div class="title">Halaman tidak ditemukan</div>
+      <p class="desc">Sepertinya kamu nyasar ke halaman yang tidak ada. Pastikan link pembayaran mengandung parameter <code>?pay=nominal</code> atau kembali ke beranda.</p>
+
+      <div class="d-flex justify-content-center gap-2" style="flex-wrap:wrap">
+        <a href="/" class="btn btn-pink">Kembali ke Beranda</a>
+        <button class="btn btn-outline-light" onclick="history.back()">Halaman Sebelumnya</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+  <script>
+  (function(){
+    const canvas = document.getElementById('bg');
+    // Renderer with alpha so background gradients show
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    // detect screen physical resolution (for 4K)
+    const screenW = window.screen.width;
+    const screenH = window.screen.height;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, 4); // allow up to DPR 4 for 4K displays (user asked 4K)
+    // Heuristic: treat as 4K when width >= 3200 or height >= 1700 or DPR >= 2.5
+    const is4K = (screenW >= 3200 || screenH >= 1700 || (window.devicePixelRatio && window.devicePixelRatio >= 2.5) || (vw >= 3200 || vh >= 1700));
+    // Performance-aware pixel ratio: if 4K, use up to 2x on lower devices else up to 3-4 if capable
+    const pixelRatio = (is4K ? Math.min(dpr, 3) : Math.min(dpr, 2));
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 200);
+    camera.position.set(0, 0, 18);
+
+    // Lighting
+    const amb = new THREE.AmbientLight(0xffffff, 0.9);
+    scene.add(amb);
+    const dir = new THREE.DirectionalLight(0xffffff, 0.7);
+    dir.position.set(3, 5, 5);
+    scene.add(dir);
+
+    // Geometries
+    const coinGeo = new THREE.CylinderGeometry(1, 1, 0.12, 64);
+    const noteGeo = new THREE.BoxGeometry(2.6, 1.6, 0.04);
+
+    // Materials
+    const coinMat = new THREE.MeshStandardMaterial({ color: 0xFFD54F, metalness: 0.9, roughness: 0.25 });
+    const notesPalette = [0xC8E6C9,0xB2EBF2,0xF8BBD0,0xFFE0B2];
+
+    function createNoteMat(){ return new THREE.MeshStandardMaterial({ color: notesPalette[Math.floor(Math.random()*notesPalette.length)], metalness:0.05, roughness:0.85 }); }
+
+    // Container
+    const moneyGroup = new THREE.Group();
+    scene.add(moneyGroup);
+
+    // Count scaling based on 4K detection and viewport size
+    const baseCoins = is4K ? Math.min(120, Math.floor((vw*vh)/(3840*2160)*120) || 80) : (vw < 520 ? 14 : (vw < 1024 ? 28 : 44));
+    const baseNotes = is4K ? Math.min(90, Math.floor((vw*vh)/(3840*2160)*90) || 60) : (vw < 520 ? 10 : (vw < 1024 ? 18 : 26));
+
+    // Create coins
+    for(let i=0;i<baseCoins;i++){
+      const m = new THREE.Mesh(coinGeo, coinMat.clone());
+      initMoney(m, true);
+      moneyGroup.add(m);
+    }
+    // Create notes
+    for(let i=0;i<baseNotes;i++){
+      const n = new THREE.Mesh(noteGeo, createNoteMat());
+      initMoney(n, false);
+      moneyGroup.add(n);
+    }
+
+    function initMoney(obj, isCoin){
+      // distribute in a wide cloud
+      const spread = is4K ? 48 : 22;
+      obj.position.set((Math.random()-0.5)*spread, (Math.random()-0.5)*spread*0.7, (Math.random()-0.5)* (is4K ? 40 : 14));
+      const s = isCoin ? (Math.random()*0.6 + (is4K?0.6:0.55)) : (Math.random()*0.7 + (is4K?0.9:0.8));
+      obj.scale.setScalar(s);
+      obj.rotation.x = Math.random()*Math.PI;
+      obj.rotation.y = Math.random()*Math.PI;
+      obj.userData = {
+        spin: (Math.random()*0.02 + 0.004) * (Math.random()<0.5?-1:1),
+        float: Math.random()*0.02 + 0.006,
+        baseZ: obj.position.z
+      };
+    }
+
+    // Animation loop (optimized)
+    let t = 0;
+    const MAX_DELTA = 0.033; // clamp delta to avoid big jumps
+    let last = performance.now();
+
+    function step(){
+      const now = performance.now();
+      let delta = (now - last)/1000;
+      if(delta > MAX_DELTA) delta = MAX_DELTA;
+      last = now;
+      t += delta;
+
+      // group subtle motion
+      moneyGroup.rotation.y = Math.sin(t*0.6)*0.06;
+      moneyGroup.position.y = Math.sin(t*0.9) * (is4K?0.6:0.25);
+
+      // animate children
+      const children = moneyGroup.children;
+      for(let i=0;i<children.length;i++){
+        const m = children[i];
+        m.rotation.y += m.userData.spin * (is4K?1.6:1);
+        m.rotation.x += m.userData.spin * (is4K?0.9:0.6);
+        // bobbing
+        m.position.y += Math.sin(t*2 + i) * m.userData.float * (is4K?0.85:0.2);
+        // slight z drift
+        m.position.z = m.userData.baseZ + Math.sin(t*0.5 + i) * (is4K?2.2:0.5);
+        // wrap z if out of range
+        const bound = is4K ? 60 : 14;
+        if(m.position.z > bound) m.position.z = -bound;
+        if(m.position.z < -bound) m.position.z = bound;
+      }
+
+      renderer.render(scene, camera);
+      // request next frame (use RAF directly)
+      requestAnimationFrame(step);
+    }
+    // Start animation
+    step();
+
+    // Resize handler
+    window.addEventListener('resize', ()=> {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth/window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
+
+    // Pause when tab hidden to save battery
+    document.addEventListener('visibilitychange', ()=>{
+      if(document.hidden){
+        // stop rendering by not requesting frames — easiest is to do nothing; RAF runs but we can bail early
+        // We'll simply not render; keep things lightweight
+      } else {
+        last = performance.now();
+        requestAnimationFrame(step);
+      }
+    });
+
+    // Optional: toggle high-quality on user gesture (for mobile saving perf)
+    // If user taps the canvas, toggle between high/low density
+    let highQuality = is4K;
+    canvas.style.touchAction = 'manipulation';
+    canvas.addEventListener('click', ()=>{
+      highQuality = !highQuality;
+      if(highQuality){
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 3));
+      } else {
+        renderer.setPixelRatio(1.0);
+      }
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Friendly note for debugging (console)
+    console.log("404 money-bg initialized. is4K:", is4K, "pixelRatio:", renderer.getPixelRatio(), "coins:", baseCoins, "notes:", baseNotes);
+  })();
+  </script>
+</body>
+</html>
