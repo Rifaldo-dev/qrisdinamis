@@ -1,24 +1,91 @@
 let currentQRData = null;
+let countdownInterval = null;
+let timeLeft = 900; // 15 minutes
 
-// Ambil parameter dari URL
+// URL Parameters
 const urlParams = new URLSearchParams(window.location.search);
 const payAmount = Number(urlParams.get('pay'));
 
-// Auto generate QR saat page load
+// Initialize
 document.addEventListener('DOMContentLoaded', function() {
+    initTheme();
+    
     if (!payAmount || payAmount < 1) {
         window.location.href = '404.html';
         return;
     }
 
     const qrisUtama = '00020101021126610014COM.GO-JEK.WWW01189360091436271261480210G6271261480303UMI51440014ID.CO.QRIS.WWW0215ID10253896834060303UMI5204573253033605802ID5909aldo soft6013PASAMAN BARAT61052656662070703A0163042275';
-
     localStorage.setItem('QRIS_Utama', qrisUtama);
 
     generateQRIS();
+    startCountdown();
 });
 
-// Format ke Rupiah
+// Theme
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon(newTheme);
+}
+
+function updateThemeIcon(theme) {
+    const icon = document.querySelector('#themeToggle i');
+    icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+// Countdown
+function startCountdown() {
+    updateCountdownDisplay();
+    countdownInterval = setInterval(() => {
+        timeLeft--;
+        updateCountdownDisplay();
+        
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            showMessage('QR Code telah kedaluwarsa. Silakan refresh halaman.', 'warning');
+            document.getElementById('qrContainer').innerHTML = `
+                <div style="text-align: center;">
+                    <i class="fas fa-clock" style="font-size: 3rem; color: var(--warning); margin-bottom: 16px;"></i>
+                    <p style="color: var(--text-secondary); margin-bottom: 16px;">QR Code Kedaluwarsa</p>
+                    <button onclick="location.reload()" class="btn-action btn-download">
+                        <i class="fas fa-redo"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            `;
+            document.getElementById('actionButtons').style.display = 'none';
+        }
+    }, 1000);
+}
+
+function updateCountdownDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    const countdownEl = document.getElementById('countdown');
+    countdownEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
+    const timerSection = document.getElementById('timerSection');
+    if (timeLeft <= 60) {
+        timerSection.style.background = '#FFE6E6';
+        timerSection.style.color = '#D63031';
+        if (document.documentElement.getAttribute('data-theme') === 'dark') {
+            timerSection.style.background = 'rgba(255, 107, 107, 0.15)';
+            timerSection.style.color = '#FF6B6B';
+        }
+    }
+}
+
+// Format Currency
 function formatCurrency(amount) {
     return new Intl.NumberFormat('id-ID', {
         style: 'currency',
@@ -27,30 +94,34 @@ function formatCurrency(amount) {
     }).format(amount);
 }
 
-// Notifikasi
+// Show Message
 function showMessage(text, type = 'danger') {
     const alertClass = type === 'success' ? 'alert-success' :
                       type === 'warning' ? 'alert-warning' : 'alert-danger';
-    const messageHtml = `
-        <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-            ${text}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    const icon = type === 'success' ? 'check-circle' :
+                type === 'warning' ? 'exclamation-triangle' : 'times-circle';
+    
+    document.getElementById('messageContainer').innerHTML = `
+        <div class="alert ${alertClass}" role="alert">
+            <i class="fas fa-${icon}" style="margin-right: 8px;"></i>${text}
         </div>
     `;
-    document.getElementById('messageContainer').innerHTML = messageHtml;
+    
     setTimeout(() => {
         const alert = document.querySelector('.alert');
-        if (alert) alert.remove();
-    }, 5000);
+        if (alert) {
+            alert.style.opacity = '0';
+            alert.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => alert.remove(), 300);
+        }
+    }, 4000);
 }
 
-// Panggil API QRIS
+// QRIS API
 async function qris(id, harga) {
     try {
         const response = await fetch(`https://api-mininxd.vercel.app/qris?qris=${id}&nominal=${harga}`);
-        const data = await response.json();
-        console.log("API Response:", data);
-        return data;
+        return await response.json();
     } catch(e) {
         return { error: e.message };
     }
@@ -59,6 +130,7 @@ async function qris(id, harga) {
 // Generate QRIS
 async function generateQRIS() {
     const qrisUtama = localStorage.getItem('QRIS_Utama');
+    
     try {
         document.getElementById('amountDisplay').textContent = formatCurrency(payAmount);
 
@@ -73,29 +145,40 @@ async function generateQRIS() {
 
         if (data.merchant) {
             document.getElementById('displayMerchantName').textContent = data.merchant;
-            document.getElementById('merchantDisplay').style.display = 'block';
+            document.getElementById('merchantDisplay').style.display = 'flex';
         }
 
         // Render QR
         const canvas = document.createElement('canvas');
         await QRCode.toCanvas(canvas, qrString, {
-            width: 280,
+            width: 240,
             margin: 2,
-            color: { dark: '#000000', light: '#FFFFFF' },
+            color: { dark: '#1A1D3D', light: '#FFFFFF' },
             errorCorrectionLevel: 'H'
         });
 
-        document.getElementById('qrContainer').innerHTML = '';
-        document.getElementById('qrContainer').appendChild(canvas);
-        document.getElementById('actionButtons').style.display = 'block';
+        const qrContainer = document.getElementById('qrContainer');
+        qrContainer.style.opacity = '0';
+        qrContainer.innerHTML = '';
+        qrContainer.appendChild(canvas);
+        
+        requestAnimationFrame(() => {
+            qrContainer.style.transition = 'opacity 0.4s ease';
+            qrContainer.style.opacity = '1';
+        });
 
-        console.log('QR Generated successfully');
+        document.getElementById('actionButtons').style.display = 'grid';
+
     } catch (error) {
         document.getElementById('qrContainer').innerHTML = `
-            <div class="text-center text-danger">
-                <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
-                <p>Gagal membuat QR Code</p>
-                <small>${error.message}</small>
+            <div style="text-align: center;">
+                <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--danger); margin-bottom: 16px;"></i>
+                <p style="color: var(--text-secondary); margin-bottom: 8px;">Gagal membuat QR Code</p>
+                <small style="color: var(--danger);">${error.message}</small>
+                <button onclick="location.reload()" class="btn-action btn-download" style="margin-top: 16px;">
+                    <i class="fas fa-redo"></i>
+                    <span>Coba Lagi</span>
+                </button>
             </div>
         `;
         showMessage('Terjadi kesalahan: ' + error.message);
@@ -119,8 +202,8 @@ function downloadQR() {
 function copyQRCode() {
     if (currentQRData) {
         navigator.clipboard.writeText(currentQRData)
-        .then(() => showMessage('Kode QRIS berhasil disalin!', 'success'))
-        .catch(() => showMessage('Gagal menyalin kode QRIS'));
+            .then(() => showMessage('Kode QRIS berhasil disalin!', 'success'))
+            .catch(() => showMessage('Gagal menyalin kode QRIS'));
     }
 }
 
@@ -128,7 +211,7 @@ function copyQRCode() {
 function shareQR() {
     if (navigator.share && currentQRData) {
         navigator.share({
-            title: 'QRIS Payment',
+            title: 'QRIS Payment - Aldo Soft',
             text: `Pembayaran ${formatCurrency(payAmount)} via QRIS`,
             url: window.location.href
         });
