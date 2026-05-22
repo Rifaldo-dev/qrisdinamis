@@ -25,120 +25,126 @@
 
   <div class="main-container">
     <div class="payment-card">
-      <!-- Header -->
-      <div class="card-header">
-        <div class="logo-container">
-          <i class="fas fa-qrcode"></i>
+      <!-- Left Column (desktop) -->
+      <div class="card-col card-col-left">
+        <!-- Header -->
+        <div class="card-header">
+          <div class="logo-container">
+            <i class="fas fa-qrcode"></i>
+          </div>
+          <h1>Pembayaran QRIS</h1>
+          <p class="subtitle">Aldo Soft Payment Gateway</p>
         </div>
-        <h1>Pembayaran QRIS</h1>
-        <p class="subtitle">Aldo Soft Payment Gateway</p>
-      </div>
 
-      <!-- Amount Display -->
-      <div class="amount-section">
-        <span class="amount-label">Total Pembayaran</span>
-        <h2 id="amountDisplay" class="amount-value">Rp 0</h2>
-      </div>
+        <!-- Amount Display -->
+        <div class="amount-section">
+          <span class="amount-label">Total Pembayaran</span>
+          <h2 id="amountDisplay" class="amount-value">Rp 0</h2>
+        </div>
 
-      <!-- Timer -->
-      <div class="timer-section" id="timerSection">
-        <i class="fas fa-clock"></i>
-        <span>Berlaku dalam: </span>
-        <span id="countdown" class="countdown">15:00</span>
-      </div>
+        <!-- Timer -->
+        <div class="timer-section" id="timerSection">
+          <i class="fas fa-clock"></i>
+          <span>Berlaku dalam: </span>
+          <span id="countdown" class="countdown">15:00</span>
+        </div>
 
-      <!-- Message Container -->
-      <div id="messageContainer"></div>
+        <!-- Message Container -->
+        <div id="messageContainer"></div>
 
-      <!-- QR Container -->
-      <div class="qr-section">
-        <div id="qrContainer" class="qr-wrapper">
-          <div class="loading-spinner">
-            <div class="spinner"></div>
-            <p>Generating QR Code...</p>
+        <!-- QR Container -->
+        <div class="qr-section">
+          <div id="qrContainer" class="qr-wrapper">
+            <div class="loading-spinner">
+              <div class="spinner"></div>
+              <p>Generating QR Code...</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Merchant Info -->
-      <div id="merchantDisplay" class="merchant-info" style="display:none;">
-        <i class="fas fa-store"></i>
-        <span id="displayMerchantName"></span>
-      </div>
-
-      <!-- Action Buttons -->
-      <div id="actionButtons" class="action-buttons" style="display:none;">
-        <button onclick="downloadQR()" class="btn-action btn-download">
-          <i class="fas fa-download"></i>
-          <span>Download</span>
-        </button>
-        <button onclick="copyQRCode()" class="btn-action btn-copy">
-          <i class="fas fa-copy"></i>
-          <span>Copy</span>
-        </button>
-        <button onclick="shareQR()" class="btn-action btn-share">
-          <i class="fas fa-share-alt"></i>
-          <span>Share</span>
-        </button>
-      </div>
-
-      <!-- Status Section -->
-      <div class="status-section">
-        <div class="status-item">
-          <i class="fas fa-shield-alt"></i>
-          <span>Aman</span>
+        <!-- Merchant Info -->
+        <div id="merchantDisplay" class="merchant-info" style="display:none;">
+          <i class="fas fa-store"></i>
+          <span id="displayMerchantName"></span>
         </div>
-        <div class="status-item">
-          <i class="fas fa-bolt"></i>
-          <span>Instan</span>
-        </div>
-        <div class="status-item">
-          <i class="fas fa-check-circle"></i>
-          <span>Terpercaya</span>
+
+        <!-- Action Buttons -->
+        <div id="actionButtons" class="action-buttons" style="display:none;">
+          <button onclick="downloadQR()" class="btn-action btn-download">
+            <i class="fas fa-download"></i>
+            <span>Download</span>
+          </button>
+          <button onclick="copyQRCode()" class="btn-action btn-copy">
+            <i class="fas fa-copy"></i>
+            <span>Copy</span>
+          </button>
+          <button onclick="shareQR()" class="btn-action btn-share">
+            <i class="fas fa-share-alt"></i>
+            <span>Share</span>
+          </button>
         </div>
       </div>
 
-      <hr class="divider">
-
-      <!-- Instructions -->
-      <div class="instructions">
-        <h6><i class="fas fa-info-circle"></i> Cara Pembayaran</h6>
-        <div class="steps">
-          <div class="step">
-            <div class="step-number">1</div>
-            <p>Buka aplikasi e-wallet atau mobile banking</p>
+      <!-- Right Column (desktop) -->
+      <div class="card-col card-col-right">
+        <!-- Status Section -->
+        <div class="status-section">
+          <div class="status-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Aman</span>
           </div>
-          <div class="step">
-            <div class="step-number">2</div>
-            <p>Pilih menu Scan QR / QRIS</p>
+          <div class="status-item">
+            <i class="fas fa-bolt"></i>
+            <span>Instan</span>
           </div>
-          <div class="step">
-            <div class="step-number">3</div>
-            <p>Scan QR Code di atas</p>
-          </div>
-          <div class="step">
-            <div class="step-number">4</div>
-            <p>Konfirmasi pembayaran</p>
+          <div class="status-item">
+            <i class="fas fa-check-circle"></i>
+            <span>Terpercaya</span>
           </div>
         </div>
-      </div>
 
-      <!-- Supported Payment -->
-      <div class="supported-payment">
-        <p>Didukung oleh:</p>
-        <div class="payment-icons">
-          <span class="payment-badge">GoPay</span>
-          <span class="payment-badge">OVO</span>
-          <span class="payment-badge">DANA</span>
-          <span class="payment-badge">ShopeePay</span>
-          <span class="payment-badge">LinkAja</span>
+        <hr class="divider">
+
+        <!-- Instructions -->
+        <div class="instructions">
+          <h6><i class="fas fa-info-circle"></i> Cara Pembayaran</h6>
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <p>Buka aplikasi e-wallet atau mobile banking</p>
+            </div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <p>Pilih menu Scan QR / QRIS</p>
+            </div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <p>Scan QR Code di atas</p>
+            </div>
+            <div class="step">
+              <div class="step-number">4</div>
+              <p>Konfirmasi pembayaran</p>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- Footer -->
-      <div class="card-footer">
-        <i class="fas fa-lock"></i>
-        <span>Transaksi aman dengan QRIS</span>
+        <!-- Supported Payment -->
+        <div class="supported-payment">
+          <p>Didukung oleh:</p>
+          <div class="payment-icons">
+            <span class="payment-badge">GoPay</span>
+            <span class="payment-badge">OVO</span>
+            <span class="payment-badge">DANA</span>
+            <span class="payment-badge">ShopeePay</span>
+            <span class="payment-badge">LinkAja</span>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer">
+          <i class="fas fa-lock"></i>
+          <span>Transaksi aman dengan QRIS</span>
+        </div>
       </div>
     </div>
   </div>

@@ -623,3 +623,187 @@ body {
     right: 30px;
   }
 }
+
+/* Desktop 2-column layout */
+@media (min-width: 900px) {
+  .main-container {
+    padding: 20px;
+    height: 100vh;
+    min-height: unset;
+    align-items: center;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  .payment-card {
+    max-width: 860px;
+    max-height: calc(100vh - 40px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: 28px;
+    overflow: hidden;
+  }
+
+  .card-col-left,
+  .card-col-right {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .card-col-right {
+    border-left: 1px solid var(--border-color);
+    justify-content: center;
+  }
+
+  /* Compact sizes to fit in viewport */
+  .card-header {
+    padding: 16px 20px;
+  }
+
+  .logo-container {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    border-radius: 12px;
+  }
+
+  .card-header h1 {
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+  }
+
+  .card-header .subtitle {
+    font-size: 0.75rem;
+  }
+
+  .amount-section {
+    padding: 12px 20px;
+  }
+
+  .amount-label {
+    font-size: 0.7rem;
+  }
+
+  .amount-value {
+    font-size: 1.6rem;
+    margin-top: 2px;
+  }
+
+  .timer-section {
+    padding: 8px;
+    font-size: 0.8rem;
+  }
+
+  .countdown {
+    font-size: 0.95rem;
+  }
+
+  .qr-section {
+    padding: 12px 20px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .qr-wrapper {
+    min-height: 180px;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .qr-wrapper canvas {
+    max-width: 180px !important;
+    max-height: 180px !important;
+  }
+
+  .merchant-info {
+    margin: 0 20px 8px;
+    padding: 8px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+  }
+
+  .action-buttons {
+    padding: 8px 20px 12px;
+    gap: 8px;
+  }
+
+  .btn-action {
+    padding: 8px 6px;
+    font-size: 0.75rem;
+    border-radius: 10px;
+  }
+
+  .btn-action i {
+    font-size: 1rem;
+  }
+
+  .status-section {
+    padding: 16px 20px 10px;
+    gap: 16px;
+  }
+
+  .status-item {
+    font-size: 0.75rem;
+  }
+
+  .divider {
+    margin: 0 20px;
+  }
+
+  .instructions {
+    padding: 16px 20px;
+  }
+
+  .instructions h6 {
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+  }
+
+  .steps {
+    gap: 8px;
+  }
+
+  .step-number {
+    width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+    border-radius: 8px;
+  }
+
+  .step p {
+    font-size: 0.8rem;
+  }
+
+  .supported-payment {
+    padding: 12px 20px;
+  }
+
+  .supported-payment p {
+    margin-bottom: 8px;
+    font-size: 0.7rem;
+  }
+
+  .payment-badge {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    border-radius: 8px;
+  }
+
+  .card-footer {
+    padding: 12px 20px;
+    font-size: 0.72rem;
+    margin-top: auto;
+  }
+
+  .alert {
+    margin: 8px 20px;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+}
